@@ -1,0 +1,120 @@
+/*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Purpose License Version 2 as
+* published by the Free Software Foundation
+*
+* Author: Toni Gabas (toni2332@gmail.com)
+*
+* Device Tree overlay to control 4 servos with beaglebone black
+*
+*/
+
+/dts-v1/;
+/plugin/;
+
+/{
+       compatible = "ti,beaglebone", "ti,beaglebone-black";
+       part-number = "PM-PWM-Test";
+       version = "00A0";
+
+       fragment@0 {
+           target = <&am33xx_pinmux>;
+           __overlay__ {
+	       pwm_inmoov_1: pinmux_pwm_inmoov_1_pins {
+	           pinctrl-single,pins = <
+                       0x024  0x4  /* gpmc_ad9  = ehrpwm2B = P8_13 | MODE 4 */
+                   >;
+               };						
+               pwm_inmoov_2: pinmux_pwm_inmoov_2_pins {
+                   pinctrl-single,pins = <
+                       0x020  0x4  /* gpmc_ad8  = ehrpwm2A = P8_19 | MODE 4 */
+                   >;
+               };						
+               pwm_inmoov_3: pinmux_pwm_inmoov_3_pins {
+                   pinctrl-single,pins = <
+                       0x150  0x3  /* spi0_sclk = ehrpwm0A = P9_22 | MODE 3 */
+                   >;
+               };
+               pwm_inmoov_4: pinmux_pwm_inmoov_4_pins {
+                   pinctrl-single,pins = <
+                       0x154  0x3  /* uart2_txd = ehrpwm0B = P9_21 | MODE 3 */
+                   >;
+               };										
+           };
+       };
+       fragment@2 {
+           target = <&epwmss2>;
+           __overlay__ {
+               status = "okay";
+           };
+       };
+
+       fragment@3 {
+           target = <&ehrpwm2>;
+           __overlay__ {			
+               status = "okay";			
+           };
+       };
+
+       fragment@4 {
+           target = <&epwmss0>;
+           __overlay__ {
+               status = "okay";
+           };
+       };
+
+       fragment@5 {
+           target = <&ehrpwm0>;
+           __overlay__ {			
+               status = "okay";			
+           };
+       };
+
+       fragment@6 {
+		target = <&ocp>;
+		__overlay__ {			
+
+			pwm1_inmoov {
+				compatible      = "pwm_test";
+				pinctrl-names   = "default";
+				pinctrl-0       = <&pwm_inmoov_1>;
+				pwms 			= <&ehrpwm2 1 20000000 1>;
+				pwm-names 		= "inMoov_pwm_1";
+				enabled			= <1>;
+				duty			= <0>;
+				status 			= "okay";
+			};
+			pwm2_inmoov {
+				compatible      = "pwm_test";
+				pinctrl-names   = "default";
+				pinctrl-0       = <&pwm_inmoov_2>;
+				pwms 			= <&ehrpwm2 0 20000000 1>;
+				pwm-names 		= "inMoov_pwm_2";
+				enabled			= <1>;
+				duty			= <0>;
+				status 			= "okay";
+			};
+			pwm3_inmoov {
+				compatible      = "pwm_test";
+				pinctrl-names   = "default";
+				pinctrl-0       = <&pwm_inmoov_3>;
+				pwms 			= <&ehrpwm0 0 20000000 1>;
+				pwm-names 		= "inMoov_pwm_3";
+				enabled			= <1>;
+				duty			= <0>;
+				status 			= "okay";
+			};
+                        pwm4_inmoov {
+                                compatible      = "pwm_test";
+                                pinctrl-names   = "default";
+                                pinctrl-0       = <&pwm_inmoov_4>;
+                                pwms                    = <&ehrpwm0 1 20000000 1>;
+                                pwm-names               = "inMoov_pwm_4";
+                                enabled                 = <1>;
+                                duty                    = <0>;
+                                status                  = "okay";
+                        };
+
+		};
+       };
+};
