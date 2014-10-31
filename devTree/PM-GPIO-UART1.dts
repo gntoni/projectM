@@ -2,45 +2,45 @@
 /plugin/;
 
 /{
-       manufacturer = "PM";
-       model = "PM,ttyO1 overlay";
-       serial-number = "1000000001";
-       part-number = "PM-GPIO-UART1";
-       compatible = "ti,beaglebone", "ti,beaglebone-black";
-       /* Identification */
-       /* Version */
-       version = "00A0";
-       board-name = "PM-GPIO-UART1";
+  manufacturer = "PM";
+  model = "PM,ttyO1 overlay";
+  serial-number = "1000000001";
+  part-number = "PM-GPIO-UART1";
+  compatible = "ti,beaglebone", "ti,beaglebone-black";
+  /* Identification */
+  /* Version */
+  version = "00A0";
+  board-name = "PM-GPIO-UART1";
 
-       /* state the resources this cape uses */
-       exclusive-use =
-           /* the pin header uses */
-           "P9.24", /* UART1 TXD */
-           "P9.26", /* UART1 RXD */
+  /* state the resources this cape uses */
+  exclusive-use =
+    /* the pin header uses */
+    "P9.24", /* UART1 TXD */
+    "P9.26", /* UART1 RXD */
 
-           /* the hardware IP use */
-           "uart1_txd", 
-           "uart1_rxd";
+    /* the hardware IP use */
+    "uart1_txd", 
+    "uart1_rxd";
 
-       fragment@0 {
-           target = <&am33xx_pinmux>;
-           __overlay__ {
-               uart1_pins: pinmux_bb_uart1_pins {
-                   pinctrl-single,pins = < 
-                       0x184 0x00  /* P9_24 = GPIO0_15 = uart1_txd.uart1_txd, OUTPUT */
-                       0x180 0x20  /* P9_26 = GPIO0_14 = uart1_rxd.uart1_rxd, INPUT */
-                   >;
-               };
-          };
-       };
+  fragment@0 {
+    target = <&am33xx_pinmux>;
+    __overlay__ {
+      uart1_pins: pinmux_uart1_pins {
+        pinctrl-single,pins = < 
+          0x184 0x00 /* P9_24 = GPIO0_15 = uart1_txd.uart1_txd, OUTPUT */
+          0x180 0x20 /* P9_26 = GPIO0_14 = uart1_rxd.uart1_rxd, INPUT */
+        >;
+      };
+    };
+  };
 
-       fragment@1 {
-           target = <&uart2>; /* really uart1 */
-           __overlay__{
-               pinctrl-names   = "default";
-               pinctrl-0        = <&uart1_pins>;
-               status           = "okay";
-           };
-       };
+  fragment@1 {
+    target = <&uart2>; /* really uart1 */
+    __overlay__ {
+      pinctrl-names = "default";
+      pinctrl-0     = <&uart1_pins>;
+      status        = "okay";
+    };
+  };
 
 };
