@@ -1,0 +1,50 @@
+/dts-v1/;
+/plugin/;
+
+/{
+  board-name = "PM-GPIO-I2C1";
+  manufacturer = "sfoix";
+  model = "PM,i2c1 overlay";
+  serial-number = "1000000001";
+  part-number = "PM-GPIO-I2C1";
+  compatible = "ti,beaglebone", "ti,beaglebone-black";
+  /* Identification */
+  /* Version */
+  version = "00A0";
+
+  /* state the resources this cape uses */
+  exclusive-use =
+    /* I2C1 pins */
+    "P9.17", /* I2C1_SCL */
+    "P9.18", /* I2C1_SDA */
+
+    /* Hardware IP cores in use */
+    "i2c1_scl",
+    "i2c1_sda";
+
+  fragment@0 {
+    target = <&am33xx_pinmux>;
+    __overlay__ {
+      i2c1_pins: pinmux_i2c1_pins {
+        pinctrl-single,pins = <
+          0x15c 0x72 /* P9_17 spi0_cs0.i2c1_scl, SLEWCTRL_SLOW | INPUT_PULLUP | MODE2 */
+          0x158 0x72 /* P9_18 spi0_d1.i2c1_sda, SLEWCTRL_SLOW | INPUT_PULLUP | MODE2 */
+        >;
+      };
+    };
+  };
+
+  fragment@1 {
+    target = <&i2c1>;
+    __overlay__{
+      compatible      = "i2c1_test";
+      pinctrl-names   = "default";
+      pinctrl-0       = <&i2c1_pins>;
+      clock-frequency = <100000>;
+      #address-cells  = <1>;
+      #size-cells     = <0>;
+      status          = "okay";
+    };
+  };
+
+};
