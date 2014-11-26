@@ -32,7 +32,7 @@ unsigned char USART_Recv[20];
 void usart_setup(){
     TRISC7 = 1;
     TRISC6 = 0;
-    SPBRG = 0x40; // 64 -> 9600 bauds
+    SPBRG = 0x40; // 64 -> 9600 bauds using a 10MHz crystal
     TXSTAbits.BRGH  = 1;
     TXSTAbits.SYNC  = 0;
     RCSTAbits.SPEN  = 1;
